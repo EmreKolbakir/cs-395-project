@@ -1,0 +1,11 @@
+{
+    "cpu": 20,
+    "memory": {
+        "used": "2 GB",
+        "total": "8 GB"
+    },
+    "disk": {
+        "used": "100 GB",
+        "total": "500 GB"
+    }
+}
