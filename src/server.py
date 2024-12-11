@@ -52,10 +52,11 @@ async def send_stats(request):
 def create_ssl_context():
     """Create SSL context for secure WebSocket connection."""
     ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-    cert_file = pathlib.Path(__file__).parents[1].joinpath("cert/localhost.crt")
-    key_file = pathlib.Path(__file__).parents[1].joinpath("cert/localhost.key")
+    cert_file = pathlib.Path("/app/cert/localhost.crt")
+    key_file = pathlib.Path("/app/cert/localhost.key")
     ssl_context.load_cert_chain(cert_file, key_file)
     return ssl_context
+
 
 
 def run():
