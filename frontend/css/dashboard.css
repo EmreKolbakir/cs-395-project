@@ -1,49 +1,90 @@
-/* Logout container */
-#logout-container {
+/* General Container Styling */
+.dashboard-container {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  #users-container, #processes-container {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #eaeaea;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  #users-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  #users-list li {
+    margin: 5px 0;
+    padding: 5px;
+    background: #f4f4f4;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  /* Processes Table */
+  table {
     width: 100%;
-    background-color: #28a745; /* Green background */
-    padding: 10px;
-    display: flex;
-    justify-content: flex-end;
-}
-
-#logout-button {
-    background-color: #dc3545; /* Red button */
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  table th, table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  table th {
+    background-color: #f4f4f4;
+  }
+  
+  button {
+    cursor: pointer;
+    background-color: green;
     color: white;
     border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  
+  button:hover {
+    background-color: darkgreen;
+  }
+
+  /* Logout Button Container */
+  #logout-container {
+    background-color: green;
+    display: flex;
+    justify-content: flex-end;
     padding: 10px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Logout Button Styling */
+  #logout-button {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    font-weight: bold;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
-}
-
-#logout-button:hover {
-    background-color: #c82333;
-}
-
-/* Dashboard container styling */
-#dashboard-container {
-    margin: 20px auto;
-    max-width: 600px;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    background-color: #f9f9f9;
-}
-
-.data-box h2 {
-    margin-bottom: 15px;
-    color: #333;
-}
-
-.data-box p {
-    margin: 5px 0;
-    font-size: 16px;
-    color: #555;
-}
-
-.error {
-    color: red;
-    font-size: 18px;
-}
+    transition: background-color 0.3s ease;
+  }
+  
+  #logout-button:hover {
+    background-color: darkred;
+  }
+  
+  
