@@ -70,8 +70,23 @@
         "Error: Kernel panic detected",
         "Low battery warning issued"
     ],
+
     "loginCredentials": {
         "username": "admin",
         "password": "password123"
-    }
+    },
+
+    "lastUsersLogged": [
+    "admin",
+    "user1",
+    "guest",
+    "user2",
+    "user3",
+    "developer",
+    "tester",
+    "support",
+    "manager",
+    "analyst"
+    ]
+
 }

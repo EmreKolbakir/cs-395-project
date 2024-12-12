@@ -3,17 +3,18 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Fetch mock data from mock_data.json
   try {
-      const response = await fetch("js/mock_data.json");
-      mockData = await response.json();
+    const response = await fetch("js/mock_data.json");
+    mockData = await response.json();
   } catch (error) {
-      console.error("Failed to load mock data:", error);
-      return;
+    console.error("Failed to load mock data:", error);
+    return;
   }
 
   const mockLoggedInUsers = mockData.loggedInUsers;
   const mockProcesses = mockData.processes;
   const stats = mockData.stats;
   const systemLogs = mockData.systemLog; // Correct key for logs
+  const lastUsersLogged = mockData.lastUsersLogged;
 
   // Populate stats
   const statsContent = document.getElementById("stats-content");
@@ -27,17 +28,17 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Populate logged-in users
   const usersList = document.getElementById("users-list");
   usersList.innerHTML = mockLoggedInUsers
-      .map((user) => `<li>${user}</li>`)
-      .join("");
+    .map((user) => `<li>${user}</li>`)
+    .join("");
 
   // Populate processes table
   const processesTable = document.getElementById("processes-table").querySelector("tbody");
   const processSummary = document.getElementById("process-summary");
 
   function renderProcesses(processes) {
-      processesTable.innerHTML = processes
-          .map(
-              (process) => `
+    processesTable.innerHTML = processes
+      .map(
+        (process) => `
           <tr>
               <td>${process.pid}</td>
               <td>${process.name}</td>
@@ -45,14 +46,14 @@ document.addEventListener("DOMContentLoaded", async () => {
               <td>${process.memory} MB</td>
           </tr>
       `
-          )
-          .join("");
+      )
+      .join("");
 
-      // Update process summary
-      const totalProcesses = processes.length;
-      const totalCPU = processes.reduce((acc, proc) => acc + proc.cpu, 0);
-      const totalMemory = processes.reduce((acc, proc) => acc + proc.memory, 0);
-      processSummary.innerText = `Total Processes: ${totalProcesses}, Total CPU: ${totalCPU}%, Total Memory: ${totalMemory} MB`;
+    // Update process summary
+    const totalProcesses = processes.length;
+    const totalCPU = processes.reduce((acc, proc) => acc + proc.cpu, 0);
+    const totalMemory = processes.reduce((acc, proc) => acc + proc.memory, 0);
+    processSummary.innerText = `Total Processes: ${totalProcesses}, Total CPU: ${totalCPU}%, Total Memory: ${totalMemory} MB`;
   }
 
   // Initial render
@@ -60,18 +61,18 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Sorting functionality
   document.getElementById("sort-pid").addEventListener("click", () => {
-      mockProcesses.sort((a, b) => a.pid - b.pid);
-      renderProcesses(mockProcesses);
+    mockProcesses.sort((a, b) => a.pid - b.pid);
+    renderProcesses(mockProcesses);
   });
 
   document.getElementById("sort-cpu").addEventListener("click", () => {
-      mockProcesses.sort((a, b) => b.cpu - a.cpu);
-      renderProcesses(mockProcesses);
+    mockProcesses.sort((a, b) => b.cpu - a.cpu);
+    renderProcesses(mockProcesses);
   });
 
   document.getElementById("sort-memory").addEventListener("click", () => {
-      mockProcesses.sort((a, b) => b.memory - a.memory);
-      renderProcesses(mockProcesses);
+    mockProcesses.sort((a, b) => b.memory - a.memory);
+    renderProcesses(mockProcesses);
   });
 
   document.getElementById("sort-name").addEventListener("click", () => {
@@ -81,17 +82,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Add functionality for the logout button
   document.getElementById("logout-button").addEventListener("click", function () {
-      console.log("Logout button clicked!");
-      window.location.href = "login.html"; // Redirect to login page
+    console.log("Logout button clicked!");
+    window.location.href = "login.html"; // Redirect to login page
   });
 
   // Populate system logs
   const logList = document.getElementById("log-list");
 
   function renderLogs(logs) {
-      logList.innerHTML = logs
-          .map((log) => `<li>${log}</li>`)
-          .join("");
+    logList.innerHTML = logs
+      .map((log) => `<li>${log}</li>`)
+      .join("");
   }
 
   // Pagination logic for logs
@@ -99,23 +100,51 @@ document.addEventListener("DOMContentLoaded", async () => {
   const logsPerPage = 5;
 
   function updateLogDisplay() {
-      const visibleLogs = systemLogs.slice(currentLogStartIndex, currentLogStartIndex + logsPerPage);
-      renderLogs(visibleLogs);
+    const visibleLogs = systemLogs.slice(currentLogStartIndex, currentLogStartIndex + logsPerPage);
+    renderLogs(visibleLogs);
   }
 
   // Add navigation button functionality
   document.getElementById("prev-logs").addEventListener("click", () => {
-      if (currentLogStartIndex > 0) {
-          currentLogStartIndex -= logsPerPage;
-          updateLogDisplay();
-      }
+    if (currentLogStartIndex > 0) {
+      currentLogStartIndex -= logsPerPage;
+      updateLogDisplay();
+    }
   });
 
   document.getElementById("next-logs").addEventListener("click", () => {
-      if (currentLogStartIndex + logsPerPage < systemLogs.length) {
-          currentLogStartIndex += logsPerPage;
-          updateLogDisplay();
-      }
+    if (currentLogStartIndex + logsPerPage < systemLogs.length) {
+      currentLogStartIndex += logsPerPage;
+      updateLogDisplay();
+    }
+  });
+
+  // Populate last users logged
+  const lastUsersList = document.getElementById("last-users-list");
+  let currentUsersStartIndex = 0;
+  const usersPerPage = 5;
+
+  function renderLastUsers(users) {
+    lastUsersList.innerHTML = users.map(user => `<li>${user}</li>`).join("");
+  }
+
+  function updateUsersDisplay() {
+    const visibleUsers = lastUsersLogged.slice(currentUsersStartIndex, currentUsersStartIndex + usersPerPage);
+    renderLastUsers(visibleUsers);
+  }
+
+  document.getElementById("prev-users").addEventListener("click", () => {
+    if (currentUsersStartIndex > 0) {
+      currentUsersStartIndex -= usersPerPage;
+      updateUsersDisplay();
+    }
+  });
+
+  document.getElementById("next-users").addEventListener("click", () => {
+    if (currentUsersStartIndex + usersPerPage < lastUsersLogged.length) {
+      currentUsersStartIndex += usersPerPage;
+      updateUsersDisplay();
+    }
   });
 
   // Initial render
