@@ -1,23 +1,28 @@
-document.getElementById("login-form").addEventListener("submit", (e) => {
-    e.preventDefault();
-  
-    const usernameInput = document.getElementById("username").value;
-    const passwordInput = document.getElementById("password").value;
-  
-    // Mock credentials for authentication
-    const mockUsername = "admin";
-    const mockPassword = "password123";
-  
-    if (usernameInput === mockUsername && passwordInput === mockPassword) {
-      // Store authentication status in localStorage
+document.getElementById("login-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  let mockData;
+
+  // Fetch mock data from mock_data.json
+  try {
+      const response = await fetch("js/mock_data.json");
+      mockData = await response.json();
+  } catch (error) {
+      console.error("Failed to load mock data:", error);
+      return;
+  }
+
+  const { username, password } = mockData.loginCredentials;
+
+  const usernameInput = document.getElementById("username").value;
+  const passwordInput = document.getElementById("password").value;
+
+  if (usernameInput === username && passwordInput === password) {
       localStorage.setItem("authenticated", "true");
-      // Redirect to the dashboard
       window.location.href = "dashboard.html";
-    } else {
-      // Display error message
+  } else {
       const errorDiv = document.getElementById("error-message");
       errorDiv.innerText = "Invalid username or password. Please try again.";
       errorDiv.style.display = "block";
-    }
-  });
-  
+  }
+});

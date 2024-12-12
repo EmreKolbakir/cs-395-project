@@ -1,11 +1,25 @@
 {
-    "cpu": 20,
-    "memory": {
-        "used": "2 GB",
-        "total": "8 GB"
+    "loggedInUsers": ["user1", "user2", "admin"],
+    "processes": [
+        { "pid": 123, "name": "System", "cpu": 0.5, "memory": 150 },
+        { "pid": 356, "name": "Google", "cpu": 5.2, "memory": 300 },
+        { "pid": 789, "name": "VS Code", "cpu": 2.5, "memory": 400 },
+        { "pid": 321, "name": "Spotify", "cpu": 1.8, "memory": 180 }
+    ],
+    "stats": {
+        "cpu": 25,
+        "memory": {
+            "used": "2 GB",
+            "total": "8 GB"
+        },
+        "disk": {
+            "used": "100 GB",
+            "total": "500 GB"
+        },
+        "loadAverage": [0.5, 0.7, 1.2]
     },
-    "disk": {
-        "used": "100 GB",
-        "total": "500 GB"
+    "loginCredentials": {
+        "username": "admin",
+        "password": "password123"
     }
 }
