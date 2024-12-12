@@ -1,90 +1,63 @@
-/* General Container Styling */
+/* Dashboard-Specific Styling */
 .dashboard-container {
-    margin: 20px;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  #users-container, #processes-container {
-    margin-top: 20px;
-    padding: 15px;
-    border: 1px solid #eaeaea;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  }
-  
-  #users-list {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  #users-list li {
-    margin: 5px 0;
-    padding: 5px;
-    background: #f4f4f4;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-  }
-  
-  /* Processes Table */
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-  }
-  
-  table th, table td {
-    border: 1px solid #ccc;
-    padding: 8px;
-    text-align: left;
-  }
-  
-  table th {
-    background-color: #f4f4f4;
-  }
-  
-  button {
-    cursor: pointer;
-    background-color: green;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 14px;
-  }
-  
-  button:hover {
-    background-color: darkgreen;
-  }
+  width: 90%;
+  margin: 20px auto;
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.219); 
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
 
-  /* Logout Button Container */
-  #logout-container {
-    background-color: green;
-    display: flex;
-    justify-content: flex-end;
-    padding: 10px 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Logout Button Styling */
-  #logout-button {
-    background-color: red;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  #logout-button:hover {
-    background-color: darkred;
-  }
-  
-  
+/* Logout Button Container */
+#logout-container {
+  background-color: rgba(122, 39, 147, 0.466); 
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Logout Button Styling */
+#logout-button {
+  background-color: rgba(255, 0, 0, 0.61); 
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+}
+
+#logout-button:hover {
+  background-color: rgba(200, 0, 0, 0.8); 
+}
+
+/* Users and Processes Container */
+#users-container,
+#processes-container {
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 10px;
+  background: rgba(207, 188, 216, 0.475); 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Processes Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+table th,
+table td {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  text-align: left;
+}
+
+table th {
+  background-color: rgba(207, 188, 216, 0.475); 
+  color: #330239;
+}
