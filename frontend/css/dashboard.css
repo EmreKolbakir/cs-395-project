@@ -243,6 +243,31 @@ table th {
   background-color: rgba(55, 8, 71, 1); /* Hover color */
 }
 
+/* System Uptime Container */
+#uptime-container {
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 10px;
+  background: rgba(207, 188, 216, 0.475); /* Purple faded theme */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#uptime-container h2 {
+  margin-bottom: 15px;
+  font-size: 26px;
+  font-weight: bold;
+  text-align: left;
+  color: #330239; /* Dark purple */
+}
+
+#uptime-content {
+  margin-top: 10px;
+  font-size: 18px;
+  color: #330239;
+  font-weight: bold;
+}
+
+
 @media (max-width: 768px) {
   .dashboard-container {
     width: 95%;

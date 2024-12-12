@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", async () => {
   let mockData;
 
-  // Fetch mock data from mock_data.json
+  // Fetch mock data from mock_data.json (for static placeholders)
   try {
     const response = await fetch("js/mock_data.json");
     mockData = await response.json();
@@ -147,6 +147,23 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
+  // Fetch and update uptime dynamically
+  async function fetchUptime() {
+    try {
+      const response = await fetch("/api/uptime");
+      const data = await response.json();
+      const uptimeDisplay = document.getElementById("uptime-content");
+      uptimeDisplay.innerText = `System Uptime: ${data.uptime}`;
+    } catch (error) {
+      console.error("Failed to fetch uptime:", error);
+    }
+  }
+
+  // Update uptime periodically every 30 seconds
+  setInterval(fetchUptime, 30000);
+
   // Initial render
   updateLogDisplay();
+  updateUsersDisplay();
+  fetchUptime();
 });
