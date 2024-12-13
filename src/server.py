@@ -2,21 +2,25 @@ import asyncio
 import json
 import pathlib
 import ssl
+import time
 
 import psutil
 from aiohttp import web
 
 
-async def hello(request):
-    text = "Hello"
-    return web.Response(text=text)
+async def serve_static(request):
+    """Serve static files (CSS, JS, HTML)."""
+    filename = request.match_info.get("filename", "login.html")
+    subdir = request.match_info.get("subdir", "")
+    base_path = pathlib.Path(__file__).parent.joinpath("../frontend")
 
+    # Build the file path
+    file_path = base_path.joinpath(subdir, filename)
 
-async def monitor(request):
-    path = pathlib.Path(__file__).parents[0].joinpath("monitor.html")
-    print("Serving {path}".format(path=path))
-    return web.FileResponse(path)
-
+    if file_path.exists():
+        return web.FileResponse(file_path)
+    else:
+        raise web.HTTPNotFound()
 
 async def get_system_stats():
     """Collect system statistics."""
@@ -27,7 +31,6 @@ async def get_system_stats():
         "load_avg": psutil.getloadavg(),
     }
     return stats
-
 
 async def send_stats(request):
     """Send system stats to WebSocket client."""
@@ -48,6 +51,25 @@ async def send_stats(request):
 
     return ws
 
+async def serve_mock_data(request):
+    """Serve the mock_data.json file."""
+    mock_data_path = pathlib.Path(__file__).parent.joinpath("../frontend/js/mock_data.json")
+    if mock_data_path.exists():
+        return web.FileResponse(mock_data_path)
+    else:
+        raise web.HTTPNotFound()
+
+async def get_uptime(request):
+    """API route to get system uptime."""
+    boot_time = psutil.boot_time()
+    current_time = time.time()
+    uptime_seconds = current_time - boot_time
+    days, remainder = divmod(uptime_seconds, 86400)
+    hours, remainder = divmod(remainder, 3600)
+    minutes, seconds = divmod(remainder, 60)
+    formatted_uptime = f"{int(days)}d {int(hours)}h {int(minutes)}m {int(seconds)}s"
+    return web.json_response({"uptime": formatted_uptime})
+
 
 def create_ssl_context():
     """Create SSL context for secure WebSocket connection."""
@@ -58,21 +80,20 @@ def create_ssl_context():
     return ssl_context
 
 
-
 def run():
-    """Start WebSocket server."""
+    """Start the application."""
     ssl_context = create_ssl_context()
     app = web.Application()
-    app.add_routes(
-        [
-            web.get("/ws", send_stats),
-            web.get("/monitor", monitor),
-            web.get("/hello", hello),
-        ]
-    )
+    app.add_routes([
+        web.get("/", lambda _: web.HTTPFound("/frontend/login.html")),
+        web.get("/frontend/{subdir}/{filename}", serve_static),
+        web.get("/frontend/{filename}", serve_static),
+        web.get("/frontend/js/mock_data.json", serve_mock_data),
+        web.get("/api/uptime", get_uptime),
+    ])
     web.run_app(app, port=8765, ssl_context=ssl_context)
 
 
 if __name__ == "__main__":
-    print("Server started at wss://localhost:8765")
+    print("Server started at https://localhost:8765")
     run()

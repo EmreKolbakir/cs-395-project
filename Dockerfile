@@ -5,19 +5,22 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # Copy application source files
-COPY src /app
+COPY src /app/src
 
-# Copy certificates to the container
+# Copy frontend files
+COPY frontend /app/frontend
+
+# Copy certificates
 COPY cert /app/cert
 
-# Install required system packages and Python dependencies
+# Install dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl gcc libssl-dev mkcert && \
-    pip install --no-cache-dir -r requirements.txt && \
+    curl gcc libssl-dev && \
+    pip install --no-cache-dir -r /app/src/requirements.txt && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Expose the application's port (8765 in this case)
+# Expose the application's port (8765)
 EXPOSE 8765
 
 # Command to start the application
-CMD ["python3", "server.py"]
+CMD ["python3", "/app/src/server.py"]

@@ -9,3 +9,5 @@ services:
       - "8765:8765"
     volumes:
       - ./cert:/app/cert
+      - ./frontend:/app/frontend
+      - ./src:/app/src
