@@ -44,12 +44,12 @@ def require_login():
 # Serve login page
 @app.route('/')
 def login_page():
-    return render_template('login.html')
+    return render_template('../frontend/login.html')
 
 # Serve dashboard page
 @app.route('/dashboard')
 def dashboard_page():
-    return render_template('dashboard.html')
+    return render_template('../frontend/dashboard.html')
 
 # System stats endpoint
 @app.route('/stats', methods=['GET'])
