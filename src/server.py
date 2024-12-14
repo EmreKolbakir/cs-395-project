@@ -1,3 +1,4 @@
+import os  # Import os to fetch environment variables
 import asyncio
 import json
 import pathlib
@@ -22,6 +23,7 @@ async def serve_static(request):
     else:
         raise web.HTTPNotFound()
 
+
 async def get_system_stats():
     """Collect system statistics."""
     stats = {
@@ -31,6 +33,7 @@ async def get_system_stats():
         "load_avg": psutil.getloadavg(),
     }
     return stats
+
 
 async def send_stats(request):
     """Send system stats to WebSocket client."""
@@ -51,6 +54,7 @@ async def send_stats(request):
 
     return ws
 
+
 async def serve_mock_data(request):
     """Serve the mock_data.json file."""
     mock_data_path = pathlib.Path(__file__).parent.joinpath("../frontend/js/mock_data.json")
@@ -58,6 +62,7 @@ async def serve_mock_data(request):
         return web.FileResponse(mock_data_path)
     else:
         raise web.HTTPNotFound()
+
 
 async def get_uptime(request):
     """API route to get system uptime."""
@@ -85,15 +90,18 @@ def run():
     ssl_context = create_ssl_context()
     app = web.Application()
     app.add_routes([
-        web.get("/", lambda _: web.HTTPFound("/frontend/login.html")),
+        web.get("/", lambda _: web.HTTPFound(f"/frontend/login.html")),
         web.get("/frontend/{subdir}/{filename}", serve_static),
         web.get("/frontend/{filename}", serve_static),
         web.get("/frontend/js/mock_data.json", serve_mock_data),
         web.get("/api/uptime", get_uptime),
     ])
-    web.run_app(app, port=8765, ssl_context=ssl_context)
+
+    # Fetch user ID from environment and use as the port
+    user_id = os.getenv("USER_ID", "8765")  # Default to 8765 if USER_ID is not provided
+    web.run_app(app, port=int(user_id), ssl_context=ssl_context)
 
 
 if __name__ == "__main__":
-    print("Server started at https://localhost:8765")
+    print("Server starting...")
     run()

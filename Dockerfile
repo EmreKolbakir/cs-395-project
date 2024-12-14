@@ -19,8 +19,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     pip install --no-cache-dir -r /app/src/requirements.txt && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Expose the application's port (8765)
-EXPOSE 8765
+# Expose the application's port 
+EXPOSE $PORT
 
 # Command to start the application
 CMD ["python3", "/app/src/server.py"]
