@@ -1,169 +1,194 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  let mockData;
+  let initialUptime = 0;
 
-  // Fetch mock data from mock_data.json (for static placeholders)
-  try {
-    const response = await fetch("js/mock_data.json");
-    mockData = await response.json();
-  } catch (error) {
-    console.error("Failed to load mock data:", error);
-    return;
-  }
-
-  const mockLoggedInUsers = mockData.loggedInUsers;
-  const mockProcesses = mockData.processes;
-  const stats = mockData.stats;
-  const systemLogs = mockData.systemLog; // Correct key for logs
-  const lastUsersLogged = mockData.lastUsersLogged;
-
-  // Populate stats
-  const statsContent = document.getElementById("stats-content");
-  statsContent.innerHTML = `
-      <div><strong>CPU Usage:</strong> ${stats.cpu}%</div>
-      <div><strong>Memory Usage:</strong> ${stats.memory.used} / ${stats.memory.total}</div>
-      <div><strong>Disk Usage:</strong> ${stats.disk.used} / ${stats.disk.total}</div>
-      <div><strong>Load Average:</strong> ${stats.loadAverage.join(", ")}</div>
-  `;
-
-  // Populate logged-in users
-  const usersList = document.getElementById("users-list");
-  usersList.innerHTML = mockLoggedInUsers
-    .map((user) => `<li>${user}</li>`)
-    .join("");
-
-  // Populate processes table
-  const processesTable = document.getElementById("processes-table").querySelector("tbody");
-  const processSummary = document.getElementById("process-summary");
-
-  function renderProcesses(processes) {
-    processesTable.innerHTML = processes
-      .map(
-        (process) => `
-          <tr>
-              <td>${process.pid}</td>
-              <td>${process.name}</td>
-              <td>${process.cpu}%</td>
-              <td>${process.memory} MB</td>
-          </tr>
-      `
-      )
-      .join("");
-
-    // Update process summary
-    const totalProcesses = processes.length;
-    const totalCPU = processes.reduce((acc, proc) => acc + proc.cpu, 0);
-    const totalMemory = processes.reduce((acc, proc) => acc + proc.memory, 0);
-    processSummary.innerText = `Total Processes: ${totalProcesses}, Total CPU: ${totalCPU}%, Total Memory: ${totalMemory} MB`;
-  }
-
-  // Initial render
-  renderProcesses(mockProcesses);
-
-  // Sorting functionality
-  document.getElementById("sort-pid").addEventListener("click", () => {
-    mockProcesses.sort((a, b) => a.pid - b.pid);
-    renderProcesses(mockProcesses);
-  });
-
-  document.getElementById("sort-cpu").addEventListener("click", () => {
-    mockProcesses.sort((a, b) => b.cpu - a.cpu);
-    renderProcesses(mockProcesses);
-  });
-
-  document.getElementById("sort-memory").addEventListener("click", () => {
-    mockProcesses.sort((a, b) => b.memory - a.memory);
-    renderProcesses(mockProcesses);
-  });
-
-  document.getElementById("sort-name").addEventListener("click", () => {
-    mockProcesses.sort((a, b) => a.name.localeCompare(b.name));
-    renderProcesses(mockProcesses);
-  });
-
-  // Add functionality for the logout button
-  document.getElementById("logout-button").addEventListener("click", function () {
-    console.log("Logout button clicked!");
-    window.location.href = "login.html"; // Redirect to login page
-  });
-
-  // Populate system logs
-  const logList = document.getElementById("log-list");
-
-  function renderLogs(logs) {
-    logList.innerHTML = logs
-      .map((log) => `<li>${log}</li>`)
-      .join("");
-  }
-
-  // Pagination logic for logs
-  let currentLogStartIndex = 0;
-  const logsPerPage = 5;
-
-  function updateLogDisplay() {
-    const visibleLogs = systemLogs.slice(currentLogStartIndex, currentLogStartIndex + logsPerPage);
-    renderLogs(visibleLogs);
-  }
-
-  // Add navigation button functionality
-  document.getElementById("prev-logs").addEventListener("click", () => {
-    if (currentLogStartIndex > 0) {
-      currentLogStartIndex -= logsPerPage;
-      updateLogDisplay();
+  function formatBytes(bytes) {
+    const units = ["B", "KB", "MB", "GB", "TB"];
+    let unitIndex = 0;
+  
+    while (bytes >= 1024 && unitIndex < units.length - 1) {
+      bytes /= 1024;
+      unitIndex++;
     }
-  });
-
-  document.getElementById("next-logs").addEventListener("click", () => {
-    if (currentLogStartIndex + logsPerPage < systemLogs.length) {
-      currentLogStartIndex += logsPerPage;
-      updateLogDisplay();
-    }
-  });
-
-  // Populate last users logged
-  const lastUsersList = document.getElementById("last-users-list");
-  let currentUsersStartIndex = 0;
-  const usersPerPage = 5;
-
-  function renderLastUsers(users) {
-    lastUsersList.innerHTML = users.map(user => `<li>${user}</li>`).join("");
+  
+    return `${bytes.toFixed(2)} ${units[unitIndex]}`;
   }
-
-  function updateUsersDisplay() {
-    const visibleUsers = lastUsersLogged.slice(currentUsersStartIndex, currentUsersStartIndex + usersPerPage);
-    renderLastUsers(visibleUsers);
+  
+  function formatPercentage(value) {
+    return `${value.toFixed(1)}%`;
   }
-
-  document.getElementById("prev-users").addEventListener("click", () => {
-    if (currentUsersStartIndex > 0) {
-      currentUsersStartIndex -= usersPerPage;
-      updateUsersDisplay();
-    }
-  });
-
-  document.getElementById("next-users").addEventListener("click", () => {
-    if (currentUsersStartIndex + usersPerPage < lastUsersLogged.length) {
-      currentUsersStartIndex += usersPerPage;
-      updateUsersDisplay();
-    }
-  });
-
-  // Fetch and update uptime dynamically
-  async function fetchUptime() {
+  
+  function formatLoadAverage(loads) {
+    return loads.map((load) => load.toFixed(2)).join(", ");
+  }
+  
+  async function fetchStats() {
     try {
-      const response = await fetch("/api/uptime");
-      const data = await response.json();
-      const uptimeDisplay = document.getElementById("uptime-content");
-      uptimeDisplay.innerText = `System Uptime: ${data.uptime}`;
+      const response = await fetch("/api/system_stats");
+      const stats = await response.json();
+      const statsContent = document.getElementById("stats-content");
+  
+      statsContent.innerHTML = `
+          <div><strong>CPU Usage:</strong> ${formatPercentage(stats.cpu_percent)}</div>
+          <div><strong>Memory Usage:</strong> ${formatBytes(stats.memory_info.used)} / ${formatBytes(stats.memory_info.total)}</div>
+          <div><strong>Disk Usage:</strong> ${formatBytes(stats.disk_usage.used)} / ${formatBytes(stats.disk_usage.total)}</div>
+          <div><strong>Load Average:</strong> ${formatLoadAverage(stats.load_avg)} (CPU Cores: ${stats.cpu_cores})</div>
+      `;
     } catch (error) {
-      console.error("Failed to fetch uptime:", error);
+      console.error("Failed to fetch system stats:", error);
     }
   }
 
-  // Update uptime periodically every 30 seconds
-  setInterval(fetchUptime, 30000);
+  // Fetch and populate logged-in users
+  // Fetch and display current logged-in users
+  async function fetchLoggedUsers() {
+    try {
+      const response = await fetch("/api/current_logged_users");
+      const users = await response.json();
+      const usersList = document.getElementById("users-list");
 
-  // Initial render
-  updateLogDisplay();
-  updateUsersDisplay();
-  fetchUptime();
+      usersList.innerHTML = users
+        .map(
+          (user) =>
+            `<li>${user.username} (Terminal: ${user.terminal}, Logged in: ${user.started})</li>`
+        )
+        .join("");
+    } catch (error) {
+      console.error("Failed to fetch logged-in users:", error);
+      const usersList = document.getElementById("users-list");
+      usersList.innerHTML = "<li>Error fetching user data.</li>";
+    }
+  }
+
+
+  // Fetch and populate processes
+  async function fetchProcesses(sortBy = "pid") {
+    try {
+      const response = await fetch(`/api/processes?sort_by=${sortBy}`);
+      const processes = await response.json();
+      const processesTable = document
+        .getElementById("processes-table")
+        .querySelector("tbody");
+
+      processesTable.innerHTML = processes
+        .map(
+          (process) => `
+            <tr>
+                <td>${process.pid}</td>
+                <td>${process.name}</td>
+                <td>${process.cpu}%</td>
+                <td>${process.memory} MB</td>
+            </tr>
+        `
+        )
+        .join("");
+    } catch (error) {
+      console.error("Failed to fetch processes:", error);
+    }
+  }
+
+  // Fetch and populate system logs
+  async function fetchSystemLogs() {
+    try {
+      const response = await fetch("/api/system_logs");
+      const logs = await response.json();
+      const logList = document.getElementById("log-list");
+
+      logList.innerHTML = logs.map((log) => `<li>${log}</li>`).join("");
+    } catch (error) {
+      console.error("Failed to fetch system logs:", error);
+    }
+  }
+
+  function formatTerminal(terminal) {
+    if (terminal.startsWith(":")) {
+      return `Graphical Session ${terminal}`;
+    } else if (terminal.startsWith("tty")) {
+      return `Physical Terminal ${terminal}`;
+    } else if (terminal.startsWith("pts")) {
+      return `Remote Terminal ${terminal}`;
+    } else {
+      return terminal; // Default case
+    }
+  }
+  
+  async function fetchLastLoggedUsers() {
+    try {
+      const response = await fetch("/api/last_logged_users");
+      const users = await response.json();
+  
+      const lastUsersList = document.getElementById("last-users-list");
+  
+      if (users.length > 0) {
+        lastUsersList.innerHTML = users
+          .map(
+            (user) =>
+              `<li>${user.username} (Terminal: ${formatTerminal(user.terminal)}, IP: ${user.ip}, Logged in: ${user.login_time})</li>`
+          )
+          .join("");
+      } else {
+        lastUsersList.innerHTML = "<li>No recent logins found.</li>";
+      }
+    } catch (error) {
+      console.error("Failed to fetch last logged-in users:", error);
+      const lastUsersList = document.getElementById("last-users-list");
+      lastUsersList.innerHTML = "<li>Error fetching user data.</li>";
+    }
+  }
+  
+  // Fetch initial uptime and start local counter
+  async function initializeUptime() {
+    try {
+      const response = await fetch("/api/system_uptime");
+      const data = await response.json();
+      const [hours, minutes, seconds] = data.uptime.split(":").map(Number);
+      initialUptime = hours * 3600 + minutes * 60 + seconds;
+
+      updateUptimeDisplay();
+      setInterval(updateUptimeCounter, 1000); // Increment uptime locally every second
+    } catch (error) {
+      console.error("Failed to fetch system uptime:", error);
+    }
+  }
+
+  function updateUptimeDisplay() {
+    const uptimeDisplay = document.getElementById("uptime-content");
+    const hours = Math.floor(initialUptime / 3600);
+    const minutes = Math.floor((initialUptime % 3600) / 60);
+    const seconds = initialUptime % 60;
+
+    uptimeDisplay.innerText = `System Uptime: ${hours}:${minutes
+      .toString()
+      .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+  }
+
+  function updateUptimeCounter() {
+    initialUptime += 1; // Increment uptime locally
+    updateUptimeDisplay();
+  }
+
+  // Event listeners for sorting processes
+  document.getElementById("sort-pid").addEventListener("click", () => fetchProcesses("pid"));
+  document.getElementById("sort-cpu").addEventListener("click", () => fetchProcesses("cpu"));
+  document.getElementById("sort-memory").addEventListener("click", () => fetchProcesses("memory"));
+  document.getElementById("sort-name").addEventListener("click", () => fetchProcesses("name"));
+
+  // Logout button functionality
+  document.getElementById("logout-button").addEventListener("click", () => {
+    localStorage.removeItem("authenticated");
+    window.location.href = "login.html";
+  });
+
+  // Fetch all data initially
+  fetchStats();
+  fetchLoggedUsers();
+  fetchProcesses();
+  fetchSystemLogs();
+  initializeUptime();
+  fetchLastLoggedUsers();
+  // Set periodic updates for non-uptime data
+  setInterval(fetchLoggedUsers, 30000); // Update every 30 seconds
+  setInterval(fetchStats, 30000); // Update stats every 30 seconds
+  setInterval(fetchSystemLogs, 30000); // Update logs every 30 seconds
+  setInterval(fetchLastLoggedUsers, 30000); // Update every 30 seconds
+
 });
