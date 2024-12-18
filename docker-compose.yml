@@ -6,10 +6,12 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8765:8765"  # Dynamically bind user ID as the external port
-    environment:
-      - USER_ID=${USER_ID}  # Pass user ID as an environment variable
+      - "8765:8765"
     volumes:
       - ./cert:/app/cert
       - ./frontend:/app/frontend
       - ./src:/app/src
+      # Mount /var/log only if it exists (for Linux users)
+      - /var/log:/host_logs:ro
+    environment:
+      - ENVIRONMENT=development

@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Expose the application's port 
-EXPOSE $PORT
+EXPOSE 8765
 
 # Command to start the application
 CMD ["python3", "/app/src/server.py"]
