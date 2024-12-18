@@ -2,94 +2,136 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}">
   </head>
   <body>
     <div class="dashboard-container">
-      <!-- Logout Button -->
-      <div id="logout-container">
-        <button id="logout-button">Logout</button>
-      </div>
+      <!-- Top container with System Stats on left, values in the middle, Logout on right -->
+      <div id="top-container">
+        <div id="logout-container">
+          <!-- System Stats Container -->
+          <div class="top-stats-container">
+            <div id="system-stats-label">System Stats</div>
+            <div class="stats-row">
+              <div class="stat-box">
+                <div class="stat-label">Uptime</div>
+                <div class="stat-value" id="uptime-value">Loading...</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-label">CPU</div>
+                <div class="stat-value" id="cpu-value">--</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-label">Memory</div>
+                <div class="stat-value" id="memory-value">--</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-label">Disk</div>
+                <div class="stat-value" id="disk-value">--</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-label">Load</div>
+                <div class="stat-value" id="load-value">--</div>
+              </div>
+            </div>
+          </div>
 
-      <!-- System Stats Section -->
-      <div id="stats-container" class="styled-container">
-        <h2>System Statistics</h2>
-        <div id="stats-content">
-          <!-- Stats will populate here -->
+          <button id="logout-button">Logout</button>
+        </div>
+      </div>
+      
+      
+      
+
+      <!-- Row container for Current Users and Last 10 Users side-by-side -->
+      <div class="row-container">
+        <!-- Current Logged-In Users Section -->
+        <div id="users-container" class="styled-container">
+          <h2>Current Logged-In Users</h2>
+          <ul id="users-list">
+            <!-- Populated by JS -->
+          </ul>
+          
+          <!-- Navigation for Current Users (always visible) -->
+          <div id="current-users-navigation" style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+            <button id="prev-current-users">Previous</button>
+            <div id="current-users-page-indicators" style="display: flex; align-items: center; gap: 5px;">
+              <!-- 5 bubbles, one for each page -->
+              <span class="page-bubble-current" data-page="1"></span>
+              <span class="page-bubble-current" data-page="2"></span>
+              <span class="page-bubble-current" data-page="3"></span>
+              <span class="page-bubble-current" data-page="4"></span>
+              <span class="page-bubble-current" data-page="5"></span>
+            </div>
+            <button id="next-current-users">Next</button>
+          </div>
+        </div>
+        
+
+
+        <!-- Last 10 Users Logged Section -->
+        <div id="last-users-container" class="styled-container">
+          <h2>Last 10 Users Logged</h2>
+          <ul id="last-users-list">
+            <!-- Users will populate here -->
+          </ul>
+          
+          <div id="last-users-navigation">
+            <button id="prev-users">Previous</button>
+            <div id="last-users-page-indicators">
+              <!-- 5 bubbles, one for each page -->
+              <span class="page-bubble" data-page="1"></span>
+              <span class="page-bubble" data-page="2"></span>
+              <span class="page-bubble" data-page="3"></span>
+              <span class="page-bubble" data-page="4"></span>
+              <span class="page-bubble" data-page="5"></span>
+            </div>
+            <button id="next-users">Next</button>
+          </div>
         </div>
       </div>
 
-      <!-- Current Logged-In Users Section -->
-      <div id="users-container">
-        <h2>Current Logged-In Users</h2>
-        <ul id="users-list">
-          <!-- List of users will populate here -->
-        </ul>
-      </div>
-
-      <!-- Processes Section -->
-      <div id="processes-container">
-        <h2>Processes</h2>
-        <p id="process-summary"></p>
-        <table id="processes-table">
-          <thead>
-            <tr>
-              <th><button id="sort-pid">PID</button></th>
-              <th><button id="sort-name">Name</button></th>
-              <th><button id="sort-cpu">CPU</button></th>
-              <th><button id="sort-memory">Memory</button></th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Process rows will populate here -->
-          </tbody>
-        </table>
-      </div>
-
-      <!-- System Log Section -->
-      <div id="log-container">
-        <h2>System Log (Last 50 Lines)</h2>
-        <ul id="log-list" style="max-height: 150px; overflow-y: auto">
-          <!-- Log entries will populate here -->
-        </ul>
-        <div
-          style="
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-          "
-        >
-          <button id="prev-logs">Previous</button>
-          <button id="next-logs">Next</button>
+      <!-- Vertical container to align Log and Processes nicely -->
+      <div class="vertical-container">
+        <!-- System Log -->
+        <div id="log-container" class="styled-container">
+          <h2>System Log (Last 50 Lines)</h2>
+          <ul id="log-list">
+            <!-- Log entries will populate here -->
+          </ul>
+          <div class="action-buttons">
+            <button id="show-more-logs">Show More</button>
+            <button id="show-less-logs" style="display:none;">Show Less</button>
+          </div>
         </div>
-      </div>
 
-      <!-- Last 10 Users Logged Section -->
-      <div id="last-users-container">
-        <h2>Last 10 Users Logged</h2>
-        <ul id="last-users-list" style="max-height: 150px; overflow-y: auto">
-          <!-- Users will populate here -->
-        </ul>
-        <div
-          id="last-users-navigation"
-          style="
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-          "
-        >
-          <button id="prev-users">Previous</button>
-          <button id="next-users">Next</button>
+        <!-- Processes Section -->
+        <div id="processes-container" class="styled-container">
+          <h2>Processes</h2>
+          <p id="process-summary"></p>
+          <div id="processes-wrapper">
+            <table id="processes-table">
+              <thead>
+                <tr>
+                  <th><button id="sort-pid">PID</button></th>
+                  <th><button id="sort-name">Name</button></th>
+                  <th><button id="sort-cpu">CPU</button></th>
+                  <th><button id="sort-memory">Memory</button></th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Process rows will populate here -->
+              </tbody>
+            </table>
+          </div>
+          <div class="action-buttons">
+            <button id="show-more-processes">Show More</button>
+            <button id="show-less-processes" style="display:none;">Show Less</button>
+          </div>
         </div>
-      </div>
-
-      <!-- System Uptime Section -->
-      <div id="uptime-container" class="styled-container">
-        <h2>System Uptime</h2>
-        <p id="uptime-content">Loading...</p>
       </div>
     </div>
 

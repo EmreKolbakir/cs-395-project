@@ -1,112 +1,327 @@
-/* Dashboard-Specific Styling */
-.dashboard-container {
-  width: 90%;
-  margin: 20px auto;
-  padding: 30px;
-  background: rgba(255, 255, 255, 0.219); 
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  overflow: hidden;
+/* System Stats Container */
+.top-stats-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;       /* Centers heading and stats row horizontally */
+  justify-content: center;   /* Centers content vertically if needed */
+  background: rgba(207, 188, 216, 0.3);
+  padding: 10px;             /* Reduced padding to decrease height */
+  border-radius: 8px;
+  gap: 10px;
 }
 
-/* Logout Button Container */
-#logout-container {
-  background-color: rgba(122, 39, 147, 0.466); 
+#system-stats-label {
+  font-weight: bold;
+  font-size: 18px;           /* Slightly smaller font to reduce height */
+  color: #330239;
+  text-align: center;
+  margin-bottom: 5px;        /* Reduced margin */
+}
+
+/* Stats Row & Stat Box */
+.stats-row {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;   /* Center stat-boxes horizontally */
+  gap: 10px;                 /* Reduced gap between boxes */
+  align-items: center;
+}
+
+.stat-box {
+  background: rgba(207, 188, 216, 0.4);
+  border-radius: 8px;
+  padding: 8px 12px;         /* Reduced padding inside boxes */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 80px;           /* Slightly smaller min-width */
+}
+
+.stat-label {
+  font-size: 14px;           /* Smaller font */
+  font-weight: bold;
+  color: #330239;
+  margin-bottom: 3px;        /* Less margin */
+}
+
+.stat-value {
+  font-size: 14px;           /* Smaller font */
+  color: #330239;
+}
+
+/* Logout Container adjustment: ensure System Stats container takes space and logout button on right */
+#logout-container {
+  display: flex;
+  align-items: center;
+  background-color: rgba(122, 39, 147, 0.466);
   padding: 10px 20px;
   border-radius: 10px;
   margin-bottom: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* Logout Button Styling */
 #logout-button {
-  background-color: rgba(255, 0, 0, 0.61); 
-  padding: 12px 20px;
-  font-size: 16px;
+  background-color: rgba(255, 0, 0, 0.61);
+  padding: 10px 20px;         /* Slightly reduced padding */
+  font-size: 16px;            /* Slightly smaller font */
   border-radius: 8px;
   color: white;
   font-weight: bold;
+  border: none;
+  cursor: pointer;
+  margin-left: auto;          /* Places logout button to the far right */
 }
 
 #logout-button:hover {
   background-color: rgba(200, 0, 0, 0.8); 
 }
 
-/* System Statistics Container */
-#stats-container {
-  margin-top: 20px;
+
+
+/* Dashboard Container */
+.dashboard-container {
+  width: 90%;
+  margin: 20px auto;
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.219);
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* Scrollbar for Dashboard Container */
+.dashboard-container::-webkit-scrollbar {
+  width: 8px;
+  background-color: rgba(122, 39, 147, 0.466);
+}
+
+.dashboard-container::-webkit-scrollbar-thumb {
+  background-color: rgba(55, 8, 71, 0.7);
+  border-radius: 4px;
+}
+
+.dashboard-container::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(55, 8, 71, 1);
+}
+
+#top-container {
+  margin-bottom: 20px;
+}
+
+/* Logout Container & Button */
+#logout-container {
+  display: flex;
+  align-items: center;
+  background-color: rgba(122, 39, 147, 0.466);
+  padding: 10px 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+#logout-button {
+  background-color: rgba(255, 0, 0, 0.61); 
+  padding: 15px 25px;
+  font-size: 18px;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+#logout-button:hover {
+  background-color: rgba(200, 0, 0, 0.8); 
+}
+
+/* System Stats at the Top */
+.top-stats-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin-right: 20px;
+}
+
+#system-stats-label {
+  font-weight: bold;
+  font-size: 22px;
+  color: #330239;
+  margin-bottom: 10px;
+}
+
+/* Stats Row & Stat Box for System Stats */
+.stats-row {
+  display: flex;
+  gap: 15px; 
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.stat-box {
+  background: rgba(207, 188, 216, 0.4);
+  border-radius: 8px;
+  padding: 10px 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 100px;
+}
+
+.stat-label {
+  font-size: 16px;
+  font-weight: bold;
+  color: #330239;
+  margin-bottom: 5px;
+}
+
+.stat-value {
+  font-size: 16px;
+  color: #330239;
+}
+
+/* Row Container for Various Sections */
+.row-container {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.row-container > div {
+  flex: 1;
+  min-width: 250px;
+  width: 30%;
   padding: 20px;
   border-radius: 10px;
-  background: rgba(207, 188, 216, 0.475); /* Purple faded theme */
+  background: rgba(207, 188, 216, 0.475);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  color: #330239;
 }
 
-/* System Statistics Header */
-#stats-container h2 {
+.row-container > div h2 {
   margin-bottom: 15px;
-  font-size: 25px;
+  font-size: 20px;
   font-weight: bold;
+  color: #330239;
   text-align: left;
-  color: #330239; /* Dark purple */
 }
 
-/* List Styling for System Statistics */
-#stats-content {
+/* Styled Container */
+.styled-container {
+  padding: 20px;
+  border-radius: 10px;
+  background: rgba(207, 188, 216, 0.475);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  color: #330239;
+}
+
+/* User Boxes */
+.user-box {
+  background: rgba(163, 143, 172, 0.2);
+  border-radius: 8px;
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.user-name {
+  font-size: 16px;
+  font-weight: bold;
+  color: #330239;
+  margin-bottom: 5px;
+}
+
+.user-info {
+  font-size: 14px;
+  color: #330239;
+}
+
+/* Lists for Users */
+#users-list,
+#last-users-list {
   list-style-type: none;
   padding: 0;
   margin: 0;
-  color: #330239; /* Dark purple for text */
-}
-
-#stats-content li {
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-
-
-/* Users and Processes Container */
-#users-container,
-#processes-container {
-  margin-top: 20px;
-  padding: 20px;
-  border-radius: 10px;
-  background: rgba(207, 188, 216, 0.475); 
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-size: 14px;
   color: #330239;
+  flex: 1; /* Ensure list takes available space */
 }
 
-/* Processes Table */
-table {
-  width: 100%;
-  border-collapse: collapse;
+/* Keep navigation at bottom by using flex layout on containers */
+#users-container,
+#last-users-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 250px; /* Ensure navigation stays at bottom */
+}
+
+/* Navigation Bars */
+#current-users-navigation,
+#last-users-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-top: 10px;
 }
 
-table th,
-table td {
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  padding: 10px;
-  text-align: left;
+#current-users-page-indicators,
+#last-users-page-indicators {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
-table th {
-  background-color: rgba(207, 188, 216, 0.475); 
-  color: #330239;
+/* Page Bubbles */
+.page-bubble,
+.page-bubble-current {
+  width: 10px;
+  height: 10px;
+  background-color: #ccc; 
+  border-radius: 50%;
+  display: inline-block;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-/* System Log Container */
-#log-container {
-  margin-top: 20px;
-  padding: 20px;
-  border-radius: 10px;
-  background: rgba(207, 188, 216, 0.475); /* Purple faded theme */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  color: #330239;
+.page-bubble.active,
+.page-bubble-current.active {
+  background-color: #330239;
 }
 
+/* Buttons in User Navigations */
+#current-users-navigation button,
+#last-users-navigation button {
+  padding: 8px 15px;
+  background: rgba(122, 39, 147, 0.466);
+  color: rgba(229, 218, 236, 0.822);
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#current-users-navigation button:hover,
+#last-users-navigation button:hover {
+  background-color: rgba(55, 8, 71, 0.466);
+}
+
+/* Vertical Container for Logs and Processes */
+.vertical-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Log List */
 #log-list {
   list-style-type: none;
   padding: 0;
@@ -120,101 +335,68 @@ table th {
 #log-list li {
   margin: 5px 0;
   padding: 10px;
-  background: rgba(163, 143, 172, 0.479); /* Faded purple for each log */
+  background: rgba(163, 143, 172, 0.479);
   border-radius: 5px;
   border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
-/* Log Navigation Buttons */
-#log-navigation {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-}
-
-#log-navigation button {
-  padding: 8px 15px;
-  background: rgba(122, 39, 147, 0.466); /* Purple button */
-  color: rgb(153, 0, 255);
-  border: none;
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-#log-navigation button:hover {
-  background-color: rgba(55, 8, 71, 0.466); /* Darker purple on hover */
-}
-
+/* Scrollbar for Log List */
 #log-list::-webkit-scrollbar {
   width: 8px;
-  background-color: rgba(122, 39, 147, 0.466); /* Track color */
+  background-color: rgba(122, 39, 147, 0.466);
 }
 
 #log-list::-webkit-scrollbar-thumb {
-  background-color: rgba(55, 8, 71, 0.7); /* Thumb color */
+  background-color: rgba(55, 8, 71, 0.7);
   border-radius: 4px;
 }
 
 #log-list::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(55, 8, 71, 1); /* Hover color */
+  background-color: rgba(55, 8, 71, 1);
 }
 
-/* Scrollbar for Dashboard Container */
-.dashboard-container {
-  max-height: 90vh; /* Keep the maximum height dynamic */
-  overflow-y: auto; /* Enable scrolling */
-}
-
-/* Scrollbar styles for WebKit browsers */
-.dashboard-container::-webkit-scrollbar {
-  width: 8px; /* Adjust width */
-  background-color: rgba(122, 39, 147, 0.466); /* Track color matches the purple theme */
-}
-
-.dashboard-container::-webkit-scrollbar-thumb {
-  background-color: rgba(55, 8, 71, 0.7); /* Thumb color */
-  border-radius: 4px; /* Rounded corners */
-}
-
-.dashboard-container::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(55, 8, 71, 1); /* Darker hover color for better visibility */
-}
-
-/* Last 10 Users Logged Container */
-#last-users-container {
-  margin-top: 20px;
-  padding: 20px;
-  border-radius: 10px;
-  background: rgba(207, 188, 216, 0.475); /* Purple faded theme */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  color: #330239;
-
-}
-
-#last-users-list {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  max-height: 150px;
+/* Processes Table */
+#processes-wrapper {
+  max-height: 200px;
   overflow-y: auto;
-  font-size: 14px;
+}
+
+#processes-wrapper table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+#processes-wrapper table th,
+#processes-wrapper table td {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  text-align: left;
+}
+
+#processes-wrapper table th {
+  background-color: rgba(207, 188, 216, 0.475) !important;
   color: #330239;
 }
 
-#last-users-list li {
-  margin: 5px 0;
-  padding: 10px;
-  background: rgba(163, 143, 172, 0.479); /* Faded purple for each user */
-  border-radius: 5px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
+/* Sticky Header for Process Table */
+#processes-wrapper table thead tr {
+  position: sticky;
+  top: 0;
+  background: rgba(207, 188, 216, 0.475);
+  z-index: 2;
 }
 
-#last-users-navigation button {
+/* Action Buttons (Show More/Less) */
+.action-buttons {
+  margin-top: 10px; 
+  display: flex; 
+  gap: 10px;
+}
+
+.action-buttons button {
   padding: 8px 15px;
-  background: rgba(122, 39, 147, 0.466); /* Purple button */
+  background: rgba(122, 39, 147, 0.466); 
   color: rgba(229, 218, 236, 0.822);
   border: none;
   border-radius: 4px;
@@ -224,50 +406,11 @@ table th {
   transition: background-color 0.3s ease;
 }
 
-#last-users-navigation button:hover {
-  background-color: rgba(55, 8, 71, 0.466); /* Darker purple on hover */
+.action-buttons button:hover {
+  background-color: rgba(55, 8, 71, 0.466);
 }
 
-/* Scrollbar for Last Users List */
-#last-users-list::-webkit-scrollbar {
-  width: 8px;
-  background-color: rgba(122, 39, 147, 0.466); /* Track color */
-}
-
-#last-users-list::-webkit-scrollbar-thumb {
-  background-color: rgba(55, 8, 71, 0.7); /* Thumb color */
-  border-radius: 4px;
-}
-
-#last-users-list::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(55, 8, 71, 1); /* Hover color */
-}
-
-/* System Uptime Container */
-#uptime-container {
-  margin-top: 20px;
-  padding: 20px;
-  border-radius: 10px;
-  background: rgba(207, 188, 216, 0.475); /* Purple faded theme */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-#uptime-container h2 {
-  margin-bottom: 15px;
-  font-size: 26px;
-  font-weight: bold;
-  text-align: left;
-  color: #330239; /* Dark purple */
-}
-
-#uptime-content {
-  margin-top: 10px;
-  font-size: 18px;
-  color: #330239;
-  font-weight: bold;
-}
-
-
+/* Responsive Adjustments */
 @media (max-width: 768px) {
   .dashboard-container {
     width: 95%;
@@ -279,10 +422,10 @@ table th {
     margin-bottom: 10px;
   }
 
-  #stats-container,
   #users-container,
-  #processes-container,
-  #log-container {
+  #last-users-container,
+  #log-container,
+  #processes-container {
     margin-bottom: 20px;
     padding: 15px;
     font-size: 14px;
@@ -300,6 +443,8 @@ table th {
   #log-list {
     max-height: 120px;
   }
+
+  .row-container > div {
+    width: 100%;
+  }
 }
-
-

@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8765:8765"  # Dynamically bind user ID as the external port
+      - "${USER_ID}:8765"  # Use the USER_ID environment variable as the external port
     environment:
       - USER_ID=${USER_ID}  # Pass user ID as an environment variable
     volumes:

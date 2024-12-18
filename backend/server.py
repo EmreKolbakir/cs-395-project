@@ -6,11 +6,17 @@ import subprocess
 import time
 from datetime import datetime
 from datetime import timedelta
+from collections import deque
 
 # Initialize Flask app
 app = Flask(__name__, template_folder="../frontend/templates", static_folder="../frontend")
 socketio = SocketIO(app, cors_allowed_origins="*")
 
+# In-memory storage for last 10 web-based logins
+LAST_LOGINS = deque(maxlen=10)
+
+# In-memory storage for active sessions
+ACTIVE_USERS = {}
 # Dynamic mapping of OS usernames to actual usernames
 USER_MAPPING = {}
 
@@ -27,17 +33,26 @@ def home():
 def login():
     data = request.json
     actual_username = data.get('username')
-    os_username = data.get('os_username')
     password = data.get('password')
+    client_ip = request.remote_addr  # Get the client's IP address
 
     if actual_username in VALID_CREDENTIALS and VALID_CREDENTIALS[actual_username] == password:
-        # Add OS-to-actual username mapping
-        if os_username not in USER_MAPPING:
-            USER_MAPPING[os_username] = set()
-        USER_MAPPING[os_username].add(actual_username)
+        # Store the login time, username, and IP address
+        login_entry = {
+            "actual_username": actual_username,
+            "login_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "ip_address": client_ip
+        }
+        LAST_LOGINS.appendleft(login_entry)  # Add to the front of the deque
+
+        # Mark user as active
+        ACTIVE_USERS[actual_username] = login_entry
+
         return jsonify({"status": "success", "message": "Login successful"}), 200
 
     return jsonify({"status": "failure", "message": "Invalid credentials"}), 401
+
+
 
 @app.route('/api/system_stats', methods=['GET'])
 def system_stats():
@@ -58,7 +73,6 @@ def system_stats():
 
 @app.route('/api/processes', methods=['GET'])
 def processes():
-    sort_by = request.args.get('sort_by', 'pid')
     processes = []
     for proc in psutil.process_iter(['pid', 'name', 'cpu_percent', 'memory_info']):
         processes.append({
@@ -67,41 +81,21 @@ def processes():
             "cpu": proc.info['cpu_percent'],
             "memory": proc.info['memory_info'].rss // (1024 * 1024)  # Memory in MB
         })
-    processes = sorted(processes, key=lambda x: x[sort_by])
+    # Remove this line: processes = sorted(processes, key=lambda x: x[sort_by])
+    # Just return in the order fetched:
     return jsonify(processes)
 
 @app.route('/api/current_logged_users', methods=['GET'])
 def current_logged_users():
     try:
-        users = psutil.users()
-        current_users = []
-
-        for user in users:
-            actual_names = USER_MAPPING.get(user.name, [user.name])
-            for actual_name in actual_names:
-                current_users.append({
-                    "username": f"{actual_name} ({user.name})",
-                    "terminal": f"Graphical Session {user.terminal}" if user.terminal.startswith(":") else f"TTY {user.terminal}",
-                    "started": datetime.fromtimestamp(user.started).strftime("%Y-%m-%d %H:%M:%S"),
-                })
-
-        return jsonify(current_users)
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-    try:
-        users = psutil.users()
-        current_users = []
-
-        for user in users:
-            # Fetch all actual usernames mapped to this OS username
-            actual_usernames = USER_MAPPING.get(user.name, [user.name])
-            for actual_username in actual_usernames:
-                current_users.append({
-                    "username": f"{actual_username} ({user.name})",
-                    "terminal": user.terminal,
-                    "started": datetime.fromtimestamp(user.started).strftime("%Y-%m-%d %H:%M:%S"),
-                })
-
+        # Return active users
+        current_users = [
+            {
+                "username": user_data["actual_username"],
+                "login_time": user_data["login_time"]
+            }
+            for user_data in ACTIVE_USERS.values()
+        ]
         return jsonify(current_users)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -119,37 +113,22 @@ def system_uptime():
 
 @app.route('/api/system_logs', methods=['GET'])
 def system_logs():
-    logs = subprocess.check_output("tail -n 50 /var/log/syslog", shell=True).decode()
-    return jsonify(logs.splitlines())
+    try:
+        logs = subprocess.check_output("tail -n 50 /var/log/syslog", shell=True).decode()
+        reversed_logs = logs.splitlines()[::-1]  # Reverse the order of the logs
+        return jsonify(reversed_logs)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 @app.route('/api/last_logged_users', methods=['GET'])
 def last_logged_users():
     try:
-        # Run the 'last' command to fetch the last 10 logins
-        result = subprocess.run(['last', '-n', '10'], stdout=subprocess.PIPE, text=True)
-        logins = []
-        for line in result.stdout.splitlines():
-            # Ignore empty lines and "wtmp begins" footer
-            if line.strip() and not line.startswith('wtmp begins'):
-                parts = line.split()
-
-                # Exclude non-user entries (e.g., "reboot", "shutdown")
-                if parts[0] in ['reboot', 'shutdown']:
-                    continue
-
-                # Parse the line for user information
-                if len(parts) >= 7:
-                    # Handle invalid IPs (e.g., ":1") and replace them with "N/A"
-                    ip = parts[2] if len(parts) > 8 and not parts[2].startswith(":") else "N/A"
-                    logins.append({
-                        "username": parts[0],
-                        "terminal": parts[1],
-                        "ip": ip,
-                        "login_time": " ".join(parts[3:7])
-                    })
-        return jsonify(logins)
+        # Return the last 10 web logins with IP addresses
+        return jsonify(list(LAST_LOGINS))
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
 @app.route('/dashboard', methods=['GET'])
 def dashboard():
