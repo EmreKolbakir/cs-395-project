@@ -1,28 +1,32 @@
 document.getElementById("login-form").addEventListener("submit", async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  let mockData;
+    const usernameInput = document.getElementById("username").value;
+    const passwordInput = document.getElementById("password").value;
 
-  // Fetch mock data from mock_data.json
-  try {
-      const response = await fetch("js/mock_data.json");
-      mockData = await response.json();
-  } catch (error) {
-      console.error("Failed to load mock data:", error);
-      return;
-  }
+    try {
+        const response = await fetch("/api/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username: usernameInput, password: passwordInput }),
+        });
 
-  const { username, password } = mockData.loginCredentials;
+        const data = await response.json();
 
-  const usernameInput = document.getElementById("username").value;
-  const passwordInput = document.getElementById("password").value;
-
-  if (usernameInput === username && passwordInput === password) {
-      localStorage.setItem("authenticated", "true");
-      window.location.href = "dashboard.html";
-  } else {
-      const errorDiv = document.getElementById("error-message");
-      errorDiv.innerText = "Invalid username or password. Please try again.";
-      errorDiv.style.display = "block";
-  }
+        if (response.ok) {
+            // Login successful
+            localStorage.setItem("authenticated", "true");
+            window.location.href = "dashboard.html";
+        } else {
+            // Display error message
+            const errorDiv = document.getElementById("error-message");
+            errorDiv.innerText = data.message || "Invalid username or password. Please try again.";
+            errorDiv.style.display = "block";
+        }
+    } catch (error) {
+        console.error("Error during login:", error);
+        const errorDiv = document.getElementById("error-message");
+        errorDiv.innerText = "Failed to connect to the server. Please try again later.";
+        errorDiv.style.display = "block";
+    }
 });

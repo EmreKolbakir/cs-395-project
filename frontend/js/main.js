@@ -93,10 +93,27 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // Logout button functionality
-  document.getElementById("logout-button").addEventListener("click", function () {
-    console.log("Logout button clicked!");
-    window.location.href = "login.html"; // Redirect to login page
+  document.getElementById("logout-button").addEventListener("click", async function () {
+    try {
+      const username = localStorage.getItem("username");
+      await fetch("/api/logout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username }),
+      });
+      window.location.href = "login.html"; // Redirect to login page
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   });
+
+  // Periodic updates for all data
+  setInterval(fetchSystemStats, 3000);
+  setInterval(fetchProcesses, 5000);
+  setInterval(fetchSystemLogs, 30000);
+  setInterval(fetchCurrentUsers, 5000);
+  setInterval(fetchLastLoggedUsers, 10000);
+  setInterval(fetchSystemUptime, 1000);
 
   // Initial fetch for all data
   fetchSystemStats();
@@ -105,11 +122,4 @@ document.addEventListener("DOMContentLoaded", async () => {
   fetchSystemLogs();
   fetchLastLoggedUsers();
   fetchSystemUptime();
-
-  // Periodic updates every second for live data
-  setInterval(fetchSystemStats, 3000);
-  setInterval(fetchProcesses, 5000);
-  setInterval(fetchSystemLogs, 30000);
-  setInterval(fetchSystemUptime, 1000);
-
 });

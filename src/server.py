@@ -21,7 +21,6 @@ VALID_CREDENTIALS = {
 CURRENT_LOGGED_USERS = {}
 LAST_LOGINS = deque(maxlen=10)
 
-
 # Serve Static Files
 async def serve_static(request):
     filename = request.match_info.get("filename", "login.html")
@@ -33,7 +32,6 @@ async def serve_static(request):
         return web.FileResponse(file_path)
     else:
         raise web.HTTPNotFound()
-
 
 # Login Endpoint
 async def api_login(request):
@@ -59,16 +57,13 @@ async def api_login(request):
     except Exception as e:
         return web.json_response({"error": str(e)}, status=500)
 
-
 # Fetch Current Logged-In Users
 async def api_current_users(request):
     return web.json_response(list(CURRENT_LOGGED_USERS.values()))
 
-
 # Fetch Last Logged Users
 async def api_last_logged_users(request):
     return web.json_response(list(LAST_LOGINS))
-
 
 # System Stats
 async def api_system_stats(request):
@@ -78,7 +73,6 @@ async def api_system_stats(request):
         "disk_usage": psutil.disk_usage('/')._asdict(),
     }
     return web.json_response(stats)
-
 
 # Processes
 async def api_processes(request):
@@ -95,7 +89,6 @@ async def api_processes(request):
             continue
     return web.json_response(processes)
 
-
 # System Logs
 async def api_system_logs(request):
     try:
@@ -109,15 +102,13 @@ async def api_system_logs(request):
     except Exception as e:
         return web.json_response({"error": str(e)}, status=500)
 
-
 # System Uptime
 async def api_system_uptime(request):
     uptime_seconds = time.time() - psutil.boot_time()
     formatted_uptime = time.strftime("%H:%M:%S", time.gmtime(uptime_seconds))
     return web.json_response({"uptime": formatted_uptime})
 
-
-# Logout Endpoint (Optional)
+# Logout Endpoint
 async def api_logout(request):
     try:
         data = await request.json()
@@ -129,7 +120,6 @@ async def api_logout(request):
     except Exception as e:
         return web.json_response({"error": str(e)}, status=500)
 
-
 # SSL Setup
 def create_ssl_context():
     ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
@@ -137,7 +127,6 @@ def create_ssl_context():
     key_file = pathlib.Path("/app/cert/localhost.key")
     ssl_context.load_cert_chain(cert_file, key_file)
     return ssl_context
-
 
 # App Setup and Routes
 def run():
@@ -157,7 +146,6 @@ def run():
         web.get("/api/system_uptime", api_system_uptime),
     ])
     web.run_app(app, port=8765, ssl_context=ssl_context)
-
 
 if __name__ == "__main__":
     print("Server started at https://localhost:8765")
