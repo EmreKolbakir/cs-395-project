@@ -1,0 +1,17 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8765:8765"
+    volumes:
+      - ./cert:/app/cert
+      - ./frontend:/app/frontend
+      - ./src:/app/src
+      - /var/log:/var/log:ro
+    pid: "host"
+    privileged: true  # Run in privileged mode
+    environment:
+      - ENVIRONMENT=development
+
