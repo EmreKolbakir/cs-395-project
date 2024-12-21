@@ -87,7 +87,7 @@ This will map your user ID as the external port for the container. For instance,
 
 For example, if your Linux user ID is `1001`, access the application at:
 
-    ```bash
+   ```bash
    https://cs395.org/1001/frontend/login.html
 
    ```
@@ -98,7 +98,7 @@ For example, if your Linux user ID is `1001`, access the application at:
 
 To stop the application and remove the container, use:
 
- ```bash
+   ```bash
    docker compose down
 
    ```
