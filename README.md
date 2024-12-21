@@ -6,13 +6,13 @@ This project provides a **System Monitor Application** that allows users to moni
 
 ### Table of Contents
 
-1. [Features](#features)  
-2. [Setup and Running](#setup-and-running)  
-3. [Docker Deployment and Accessing](#docker-deployment)  
-4. [Tech Stack](#tech-stack)
-5. [Exposed Ports](#exposed-ports)
-6. [Comments](#comments)  
-7. [License](#license)  
+1. [✨ Features](#features)  
+2. [⚙️ Setup and Running](#setup-and-running)  
+3. [🐋 Docker Deployment and Accessing](#docker-deployment)  
+4. [🛠️ Tech Stack](#tech-stack)  
+5. [🌐 Exposed Ports](#exposed-ports)  
+6. [💬 Comments](#comments)  
+7. [📜 License](#license)
 
 ---
 
