@@ -103,6 +103,12 @@ To stop the application and remove the container, use:
 
 ---
 
+## Why is the Application Limited to Localhost?
+
+Initially, the application was planned to be an internet-accessible service, allowing users to access it from anywhere. We put significant effort into making this possible, exploring various networking and security configurations. However, due to our limited experience with these areas and the complexities of public deployment processes, we were ultimately unable to manage it successfully. Instead, we decided to focus on making the application accessible via localhost or within the same local network.
+
+---
+
 ## Tech Stack
 
 - **Backend**: Python (aiohttp, psutil)
