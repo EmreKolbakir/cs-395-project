@@ -9,9 +9,9 @@ This project provides a **System Monitor Application** that allows users to moni
 1. [Features](#features)  
 2. [Setup and Running](#setup-and-running)  
 3. [Docker Deployment](#docker-deployment)  
-   - [Accessing the Application](#accessing-the-application)   
-4. [Exposed Ports](#exposed-ports)  
-5. [Tech Stack](#tech-stack)  
+   - [Accessing the Application](#accessing-the-application)    
+4. [Tech Stack](#tech-stack)
+5. [Exposed Ports](#exposed-ports)   
 6. [License](#license)  
 
 ---
@@ -65,6 +65,12 @@ To run the application as a background service, follow these steps:
    
    ```
 For example, if your user ID is 1001, this will be used as the port number.
+
+2. **Build the Dockerized Application**:
+   ```bash
+   USER_ID=$(id -u) docker compose build
+
+   ```
 
 2. **Start the application using Docker Compose**:
    ```bash
@@ -123,25 +129,6 @@ The dynamic port mapping ensures that each user's application runs on a unique p
 
 ---
 
-## Example Workflow
-
-### 1. Clone the repository:
-```bash
-git clone <repository-url>
-cd cs-395-project
-
-```
-### 2. Start the Dockerized application:
-```bash
-USER_ID=$(id -u) docker compose up -d
-
-```
-
-### 3. Open your browser and navigate to:
-```bash
-https://cs395.org/<your Linux user id>/frontend/login.html
-
-```
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
