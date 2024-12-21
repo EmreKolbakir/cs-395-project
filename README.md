@@ -53,49 +53,42 @@ cd cs-395-project
 ```
 ---
 
+---
+
 ## Docker Deployment
 
 ### 1. Build and Run the Application
 
 To run the application as a background service, follow these steps:
 
-1. **Determine your Linux user ID**:
+1. **Build the Dockerized Application**:
    ```bash
-   id -u
-   
-   ```
-For example, if your user ID is 1001, this will be used as the port number.
-
-2. **Build the Dockerized Application**:
-   ```bash
-   USER_ID=$(id -u) docker compose build
-
+   docker compose build
    ```
 
 2. **Start the application using Docker Compose**:
    ```bash
-   USER_ID=$(id -u) docker compose up -d
-
+   docker compose up -d
    ```
-This will map your user ID as the external port for the container. For instance, if your user ID is 1001, the application will be accessible at:
 
-   ```bash
-   https://cs395.org/1001/frontend/login.html
-
-   ```
+   This will expose the application on port `8765`, making it accessible only via `localhost` or your local network IP.
 
 ---
 
 ### 2. Accessing the Application
 
-- **Login Page**: `https://cs395.org/<your Linux user id>/frontend/login.html`
+- **Login Page**: `http://localhost:8765/`  
+  or `http://<local IP>:8765/`
 - **Dashboard**: Automatically redirects upon successful login.
 
-For example, if your Linux user ID is `1001`, access the application at:
+For example, to access the application on your local machine, navigate to:
 
    ```bash
-   https://cs395.org/1001/frontend/login.html
-
+   http://localhost:8765/frontend/
+   ```
+   or, if accessing via a local network:
+   ```bash
+   http://<local IP>:8765/
    ```
 
 ---
@@ -123,9 +116,7 @@ To stop the application and remove the container, use:
 ## Exposed Ports
 
 - **Container Port**: `8765` (internal)
-- **Host Port**: `<Linux user ID>` (dynamic)
-
-The dynamic port mapping ensures that each user's application runs on a unique port, corresponding to their Linux user ID.
+- **Host Port**: `8765` (static)
 
 ---
 
