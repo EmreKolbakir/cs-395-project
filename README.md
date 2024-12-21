@@ -10,8 +10,9 @@ This project provides a **System Monitor Application** that allows users to moni
 2. [Setup and Running](#setup-and-running)  
 3. [Docker Deployment and Accessing](#docker-deployment)  
 4. [Tech Stack](#tech-stack)
-5. [Exposed Ports](#exposed-ports)   
-6. [License](#license)  
+5. [Exposed Ports](#exposed-ports)
+6. [Comments](#comments)  
+7. [License](#license)  
 
 ---
 
@@ -103,9 +104,9 @@ To stop the application and remove the container, use:
 
 ---
 
-## Why is the Application Limited to Localhost?
+## Comments
 
-Initially, the application was planned to be an internet-accessible service, allowing users to access it from anywhere. We put significant effort into making this possible, exploring various networking and security configurations. However, due to our limited experience with these areas and the complexities of public deployment processes, we were ultimately unable to manage it successfully. Instead, we decided to focus on making the application accessible via localhost or within the same local network.
+During the development and deployment of this project, we encountered significant challenges in configuring the application to work with the cs395.org/<user ID> URL on the provided server. Despite extensive efforts, including debugging port mapping issues, container logs, and server configurations, the setup consistently resulted in connection errors or 404 responses. The requirement to dynamically map user IDs as ports introduced compatibility issues, and the server environment lacked the flexibility needed to fully implement the desired functionality. While the application performed flawlessly on local setups, replicating this success on the server proved unreliable. To ensure a functional and accessible solution, we opted to run the application on localhost with a fixed port (8765). This decision prioritized reliability and usability, allowing the application to showcase its full range of features without the complications introduced by the server's limitations.
 
 ---
 
