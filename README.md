@@ -8,8 +8,7 @@ This project provides a **System Monitor Application** that allows users to moni
 
 1. [Features](#features)  
 2. [Setup and Running](#setup-and-running)  
-3. [Docker Deployment](#docker-deployment)  
-   - [Accessing the Application](#accessing-the-application)    
+3. [Docker Deployment and Accessing](#docker-deployment)  
 4. [Tech Stack](#tech-stack)
 5. [Exposed Ports](#exposed-ports)   
 6. [License](#license)  
