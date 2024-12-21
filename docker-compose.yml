@@ -1,19 +1,16 @@
-version: '3.8'
-
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8765:8765"  # Dynamically map port using the USER_ID environment variable
+      - "8765:8765"
     volumes:
       - ./cert:/app/cert
       - ./frontend:/app/frontend
       - ./src:/app/src
-      # Mount /var/log only if it exists (for Linux users)
       - /var/log:/host_logs:ro
     pid: "host"
-    privileged: true  # Run in privileged mode
+    privileged: true 
     environment:
       - ENVIRONMENT=production
