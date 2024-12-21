@@ -163,7 +163,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Periodic updates for all data (set intervals for each fetch operation)
   setInterval(fetchSystemStats, 3000); // Update system stats every 3 seconds
-  setInterval(fetchProcesses, 5000); // Update process list every 5 seconds
+  setInterval(fetchProcesses, 50000); // Update process list every 5 seconds
   setInterval(fetchSystemLogs, 30000); // Update system logs every 30 seconds
   setInterval(fetchCurrentUsers, 5000); // Update logged-in users every 5 seconds
   setInterval(fetchLastLoggedUsers, 10000); // Update last logged-in users every 10 seconds

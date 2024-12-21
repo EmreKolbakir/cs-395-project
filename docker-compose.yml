@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "${USER_ID}:8765"  # Dynamically map port using the USER_ID environment variable
+      - "8765:8765"  # Dynamically map port using the USER_ID environment variable
     volumes:
       - ./cert:/app/cert
       - ./frontend:/app/frontend
@@ -17,4 +17,3 @@ services:
     privileged: true  # Run in privileged mode
     environment:
       - ENVIRONMENT=production
-      - USER_ID=${USER_ID}  # Pass the Linux user ID dynamically to the container
