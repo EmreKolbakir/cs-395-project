@@ -77,7 +77,7 @@ To run the application as a background service, follow these steps:
 
 ### 2. Accessing the Application
 
-- **Login Page**: `http://localhost:8765/`  
+- **Login Page**: `https://localhost:8765/`  
   or `https://<local IP>:8765/`
 - **Dashboard**: Automatically redirects upon successful login.
 
