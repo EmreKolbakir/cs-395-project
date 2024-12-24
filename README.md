@@ -78,17 +78,17 @@ To run the application as a background service, follow these steps:
 ### 2. Accessing the Application
 
 - **Login Page**: `http://localhost:8765/`  
-  or `http://<local IP>:8765/`
+  or `https://<local IP>:8765/`
 - **Dashboard**: Automatically redirects upon successful login.
 
 For example, to access the application on your local machine, navigate to:
 
    ```bash
-   http://localhost:8765/frontend/
+   https://localhost:8765/
    ```
    or, if accessing via a local network:
    ```bash
-   http://<local IP>:8765/
+   https://<local IP>:8765/
    ```
 
 ---
